@@ -19,18 +19,21 @@ func main() {
 
 		// Wait for user input
 		command, _ := bufio.NewReader(os.Stdin).ReadString('\n')
-		programs := strings.Split(command, " ")
+		programs := strings.SplitN(command, " ", 2)
 
 		switch programs[0] {
 		case "exit":
-			if len(programs) > 2 {
+			arguments := strings.Split(programs[1], " ")
+			if len(arguments) > 2 {
 				errors.New("Wrong Arguments")
 			}
-			argument, error := strconv.Atoi(programs[1])
+			argument, error := strconv.Atoi(arguments[0])
 			if error != nil {
 				errors.New("Wrong Argument")
 			}
 			os.Exit(argument)
+		case "echo":
+			fmt.Fprintf(os.Stdout, "%s", programs[1])
 		default:
 			fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
 		}
