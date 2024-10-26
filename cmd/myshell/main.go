@@ -91,15 +91,12 @@ func main() {
 			if search {
 				arguments := strings.Split(programs[1], " ")
 				cmd := exec.Command(programs[0], arguments...)
+				cmd.Stderr = os.Stderr
+				cmd.Stdout = os.Stdout
 				err := cmd.Run()
 				if err != nil {
 					errors.New("Exec Error")
 				}
-				output, err1 := cmd.Output()
-				if err1 != nil {
-					errors.New("Exec Error ")
-				}
-				fmt.Fprintf(os.Stdout, string(output))
 			} else {
 				fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
 			}
