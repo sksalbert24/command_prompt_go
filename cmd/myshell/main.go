@@ -32,6 +32,38 @@ func contains(array []string, value string) bool {
 	return false
 }
 
+func contain_command_in_dir(path string, command string) (bool, error) {
+	files, err := os.ReadDir(path)
+	if err != nil {
+		return false, err
+	}
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		if file.Name() == command {
+			fmt.Fprintf(os.Stdout, "%s is %s\n", command, path+"/"+file.Name())
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func search_path(command string) bool {
+	paths_to_search := os.Getenv("PATH")
+	path_list := strings.Split(paths_to_search, ":")
+	for _, value := range path_list {
+		res, err := contain_command_in_dir(value, command)
+		if err != nil {
+			return false
+		}
+		if res {
+			return true
+		}
+	}
+	return false
+}
+
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
@@ -66,7 +98,11 @@ func main() {
 			if contains(builtin_functions, argument) {
 				fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", argument)
 			} else {
-				fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
+				if search_path(argument) {
+
+				} else {
+					fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
+				}
 			}
 		default:
 			fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
