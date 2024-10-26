@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -33,33 +34,15 @@ func contains(array []string, value string) bool {
 	return false
 }
 
-func contain_command_in_dir(path string, command string) (bool, error) {
-	files, err := os.ReadDir(path)
-	if err != nil {
-		return false, err
-	}
-	for _, file := range files {
-		if file.IsDir() {
-			continue
-		}
-		if file.Name() == command {
-			fmt.Fprintf(os.Stdout, "%s is %s\n", command, path+"/"+file.Name())
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
-func search_path(command string) bool {
+func search_path(command string) (bool, string) {
 	path_list := strings.Split(os.Getenv("PATH"), ":")
 	for _, value := range path_list {
 		file := filepath.Join(value, command)
 		if _, err := os.Stat(file); err == nil {
-			fmt.Println(command + " is " + file)
-			return true
+			return true, file
 		}
 	}
-	return false
+	return false, ""
 }
 
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
@@ -96,14 +79,25 @@ func main() {
 			if contains(builtin_functions, argument) {
 				fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", argument)
 			} else {
-				if search_path(argument) {
-
+				search, path := search_path(argument)
+				if search {
+					fmt.Println(command + " is " + path)
 				} else {
 					fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
 				}
 			}
 		default:
-			fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
+			search, _ := search_path(programs[0])
+			if search {
+				cmd := exec.Command(programs[0], programs[1])
+				output, err := cmd.Output()
+				if err != nil {
+					errors.New("Exec Error ")
+				}
+				fmt.Println(string(output))
+			} else {
+				fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
+			}
 		}
 	}
 }
