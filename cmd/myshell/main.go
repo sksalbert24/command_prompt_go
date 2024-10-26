@@ -89,9 +89,14 @@ func main() {
 		default:
 			search, _ := search_path(programs[0])
 			if search {
-				cmd := exec.Command(programs[0], programs[1])
-				output, err := cmd.Output()
+				arguments := strings.Split(programs[1], " ")
+				cmd := exec.Command(programs[0], arguments...)
+				err := cmd.Run()
 				if err != nil {
+					errors.New("Exec Error")
+				}
+				output, err1 := cmd.Output()
+				if err1 != nil {
 					errors.New("Exec Error ")
 				}
 				fmt.Fprintf(os.Stdout, string(output))
