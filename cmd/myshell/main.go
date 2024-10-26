@@ -66,7 +66,7 @@ func main() {
 			if contains(builtin_functions, argument) {
 				fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", argument)
 			} else {
-				fmt.Fprintf(os.Stdout, "%s: command not found\n", argument)
+				fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
 			}
 		default:
 			fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
