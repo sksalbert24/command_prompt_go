@@ -94,7 +94,7 @@ func main() {
 				if err != nil {
 					errors.New("Exec Error ")
 				}
-				fmt.Println(string(output))
+				fmt.Fprintf(os.Stdout, string(output))
 			} else {
 				fmt.Fprintf(os.Stdout, "%s: command not found\n", strings.TrimRight(command, "\n"))
 			}
