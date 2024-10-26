@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -50,15 +51,11 @@ func contain_command_in_dir(path string, command string) (bool, error) {
 }
 
 func search_path(command string) bool {
-	paths_to_search := os.Getenv("PATH")
-	path_list := strings.Split(paths_to_search, ":")
+	path_list := strings.Split(os.Getenv("PATH"), ":")
 	for _, value := range path_list {
-		fmt.Fprintf(os.Stdout, "%s\n", value)
-		res, err := contain_command_in_dir(value, command)
-		if err != nil {
-			return false
-		}
-		if res {
+		file := filepath.Join(value, command)
+		if _, err := os.Stat(file); err == nil {
+			fmt.Println(command + " is " + file)
 			return true
 		}
 	}
