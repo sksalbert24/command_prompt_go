@@ -81,7 +81,7 @@ func main() {
 			} else {
 				search, path := search_path(argument)
 				if search {
-					fmt.Println(command + " is " + path)
+					fmt.Println(argument + " is " + path)
 				} else {
 					fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
 				}
