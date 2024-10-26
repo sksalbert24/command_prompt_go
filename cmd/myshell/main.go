@@ -90,6 +90,7 @@ func main() {
 			search, _ := search_path(programs[0])
 			if search {
 				arguments := strings.Split(programs[1], " ")
+				arguments[len(arguments)-1] = strings.TrimRight(arguments[len(arguments)-1], "\n")
 				cmd := exec.Command(programs[0], arguments...)
 				cmd.Stderr = os.Stderr
 				cmd.Stdout = os.Stdout
