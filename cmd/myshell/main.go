@@ -53,6 +53,7 @@ func search_path(command string) bool {
 	paths_to_search := os.Getenv("PATH")
 	path_list := strings.Split(paths_to_search, ":")
 	for _, value := range path_list {
+		fmt.Fprintf(os.Stdout, "%s\n", value)
 		res, err := contain_command_in_dir(value, command)
 		if err != nil {
 			return false
