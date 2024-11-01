@@ -109,7 +109,7 @@ func main() {
 				argument := strings.TrimRight(programs[1], "\n")
 				err := os.Chdir(argument)
 				if err != nil {
-					fmt.Println("cd: %s: No such file or directory\n", argument)
+					fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", argument)
 					return
 				}
 			}
