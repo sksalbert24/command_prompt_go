@@ -107,9 +107,16 @@ func main() {
 				errors.New("Wrong Arguments")
 			} else {
 				argument := strings.TrimRight(programs[1], "\n")
-				err := os.Chdir(argument)
-				if err != nil {
-					fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", argument)
+				if argument != "~" {
+					err := os.Chdir(argument)
+					if err != nil {
+						fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", argument)
+					}
+				} else {
+					err := os.Chdir(os.Getenv("HOME"))
+					if err != nil {
+						fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", argument)
+					}
 				}
 			}
 		default:
