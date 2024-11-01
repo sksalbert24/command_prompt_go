@@ -103,13 +103,13 @@ func main() {
 				fmt.Fprintf(os.Stdout, dir+"\n")
 			}
 		case builtin_functions[Cd]:
-			if 0 == len(programs) || len(programs) > 2 {
+			if len(programs) == 0 || len(programs) > 2 {
 				errors.New("Wrong Arguments")
 			} else {
 				argument := strings.TrimRight(programs[1], "\n")
 				err := os.Chdir(argument)
 				if err != nil {
-					fmt.Println("Error changing directory:", err)
+					fmt.Println("cd: %s: No such file or directory\n", argument)
 					return
 				}
 			}
