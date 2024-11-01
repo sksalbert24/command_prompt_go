@@ -18,6 +18,7 @@ const (
 	Echo
 	Type
 	Pwd
+	Cd
 )
 
 var builtin_functions = []string{
@@ -25,6 +26,7 @@ var builtin_functions = []string{
 	"echo",
 	"type",
 	"pwd",
+	"cd",
 }
 
 func contains(array []string, value string) bool {
@@ -99,6 +101,17 @@ func main() {
 					return
 				}
 				fmt.Fprintf(os.Stdout, dir+"\n")
+			}
+		case builtin_functions[Cd]:
+			if 0 == len(programs) || len(programs) > 2 {
+				errors.New("Wrong Arguments")
+			} else {
+				argument := strings.TrimRight(programs[1], "\n")
+				err := os.Chdir(argument)
+				if err != nil {
+					fmt.Println("Error changing directory:", err)
+					return
+				}
 			}
 		default:
 			search, _ := search_path(programs[0])
