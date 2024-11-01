@@ -14,7 +14,7 @@
 
 	// Configure tool-specific properties.
 	// "customizations": {},
-	"workspaceMount": "source=${localWorkspaceFolder}, target=/workspaces,type=bind",
+	"workspaceMount": "source=${localWorkspaceFolder}, target=/workspace,type=bind",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"remoteUser": "${localEnv:USER}",
 	"portsAttributes": {

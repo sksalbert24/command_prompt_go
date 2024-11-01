@@ -17,12 +17,14 @@ const (
 	Exit BuildInEnum = iota
 	Echo
 	Type
+	Pwd
 )
 
 var builtin_functions = []string{
 	"exit",
 	"echo",
 	"type",
+	"pwd",
 }
 
 func contains(array []string, value string) bool {
@@ -56,6 +58,7 @@ func main() {
 		// Wait for user input
 		command, _ := bufio.NewReader(os.Stdin).ReadString('\n')
 		programs := strings.SplitN(command, " ", 2)
+		programs[0] = strings.TrimRight(programs[0], "\n")
 
 		switch programs[0] {
 		case builtin_functions[Exit]:
@@ -85,6 +88,17 @@ func main() {
 				} else {
 					fmt.Fprintf(os.Stdout, "%s: not found\n", argument)
 				}
+			}
+		case builtin_functions[Pwd]:
+			if len(programs) > 1 {
+				errors.New("Wrong Arguments")
+			} else {
+				dir, err := os.Getwd()
+				if err != nil {
+					fmt.Println("Error:", err)
+					return
+				}
+				fmt.Fprintf(os.Stdout, dir+"\n")
 			}
 		default:
 			search, _ := search_path(programs[0])
